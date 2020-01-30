@@ -18,6 +18,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
     
     super.initState();
     controller = AnimationController(vsync: this,duration: Duration(seconds: 3));
+    animation = ColorTween(begin:Colors.red,end: Colors.white).animate(controller);
    
 
     controller.forward();
@@ -40,7 +41,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: animation.value,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
