@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'login_screen.dart';
 import 'registration_screen.dart';
 
@@ -17,7 +17,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
   void initState() {
     
     super.initState();
-    controller = AnimationController(vsync: this,duration: Duration(seconds: 3));
+    controller = AnimationController(vsync: this,duration: Duration(seconds: 1));
     animation = ColorTween(begin:Colors.red,end: Colors.white).animate(controller);
    
 
@@ -35,7 +35,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
   void dispose() {
     
     super.dispose();
- return controller.dispose();
+ controller.dispose();
   }
   
   @override
@@ -57,13 +57,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                       height: 60.0,
                   ),
                 ),
-                Text(
-                  'Flash Chat',
-                  style: TextStyle(
-                    fontSize: 45.0,
-                    fontWeight: FontWeight.w900,
+                TypewriterAnimatedTextKit(
+                  text:['Flash Chat'],
+                    textStyle: TextStyle(
+                      fontSize: 45.0,
+                      fontWeight: FontWeight.w900,
+                    ),
+                    speed: Duration(seconds: 1),
+                    totalRepeatCount: 10,
                   ),
-                ),
+                
               ],
             ),
             SizedBox(
