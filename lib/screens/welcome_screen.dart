@@ -21,15 +21,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
     controller = AnimationController(vsync: this,duration: Duration(seconds: 1));
     animation = ColorTween(begin:Colors.red,end: Colors.white).animate(controller);
    
-
     controller.forward();
-   
-     
     controller.addListener((){
       setState(() {
         
       });
-      print(controller.value);
+
     });
   }
 @override
