@@ -8,10 +8,10 @@ class ChatScreen extends StatefulWidget {
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
-final TextEditingController _textController = new TextEditingController();
+
 
 class _ChatScreenState extends State<ChatScreen> {
-  
+  final  messageTextController =  TextEditingController();
   String text;
   final firestore = Firestore.instance;
   final _auth = FirebaseAuth.instance;
@@ -105,6 +105,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: <Widget>[
                   Expanded(
                     child: TextField(
+                      controller: messageTextController,
                       onChanged: (value) {
                         //Do something with the user input.
                         text = value;
@@ -119,7 +120,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       await firestore.collection("messages").add({
                         'text':text,
                         'user':loggedInUser.email,});
-                        _textController.clear();
+                        messageTextController.clear();
                       }
                       
                       catch(e){
@@ -147,14 +148,30 @@ class MessageBubble extends StatelessWidget {
   final String userEmail;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: <Widget>[
-        Text('$messageText'),
-        Text('$userEmail')
-      ],
-      
-    );
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+    crossAxisAlignment: CrossAxisAlignment.end,
+    children: <Widget>[
+      Card(
+        
+        margin: EdgeInsets.only(top:20.0),
+        color: Colors.blueAccent,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text('$messageText',
+          
+            style: TextStyle(
+              fontSize: 25.0,
+              color: Colors.white
+          )
+          ),
+        ),
+      ),
+      Text('$userEmail')
+    ],
+    
+        ),
+      );
   }
 }
