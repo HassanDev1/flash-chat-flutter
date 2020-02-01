@@ -8,9 +8,10 @@ class ChatScreen extends StatefulWidget {
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
+final TextEditingController _textController = new TextEditingController();
 
 class _ChatScreenState extends State<ChatScreen> {
-
+  
   String text;
   final firestore = Firestore.instance;
   final _auth = FirebaseAuth.instance;
@@ -71,18 +72,29 @@ class _ChatScreenState extends State<ChatScreen> {
             StreamBuilder<QuerySnapshot>(
               stream: firestore.collection("messages").snapshots(),
               builder: (context,snapshot){
+                if(!snapshot.hasData){
+                  return Center(child: CircularProgressIndicator(
+                    backgroundColor: Colors.blueAccent,
+                  ),);
+                }
                 final messages = snapshot.data.documents;
-                List<Text> textMessageWidgets = [];
+                List<MessageBubble> textMessageWidgets = [];
 
                 for(var message in messages){
                   final messageText = message.data['text'];
                   final messageUser = message.data['user'];
 
-                  textMessageWidgets.add(Text('$messageText from $messageUser'));
+                  textMessageWidgets.add(MessageBubble(
+                    messageText: messageText,
+                  userEmail:messageUser));
               }
-              return Column(
-                children:textMessageWidgets,
-                );
+              return 
+              Expanded(    
+                child: ListView(
+                  
+                      children:textMessageWidgets,
+                  ),
+              );
               }
 
             ),
@@ -107,8 +119,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       await firestore.collection("messages").add({
                         'text':text,
                         'user':loggedInUser.email,});
-                        print("success");
+                        _textController.clear();
                       }
+                      
                       catch(e){
                         print(e);
                       }
@@ -124,6 +137,24 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class MessageBubble extends StatelessWidget {
+ MessageBubble({this.messageText,this.userEmail});
+ final  String messageText;
+  final String userEmail;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: <Widget>[
+        Text('$messageText'),
+        Text('$userEmail')
+      ],
+      
     );
   }
 }
